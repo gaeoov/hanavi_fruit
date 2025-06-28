@@ -1,0 +1,278 @@
+body {
+    margin: 0;
+    background: url('./image/hanavi_summer.png') no-repeat center center fixed; 
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Gamja Flower', cursive;
+}
+
+.setting-item input[type="radio"] {
+    margin-right: 5px;
+    accent-color: #B0E0E6; /* 파우더 블루 */
+}
+
+.setting-item input[type="radio"] + label {
+    margin-right: 15px;
+}
+
+#main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+#intro-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.9); /* 부드러운 흰색 */
+    border: none; /* 테두리 제거 */
+    padding: 40px;
+    border-radius: 20px; /* 더 둥글게 */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+    z-index: 10;
+}
+
+#intro-screen h1 {
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #6A5ACD;
+}
+
+.input-group input[type="text"] {
+    padding: 10px;
+    font-size: 1.1em;
+    border: 2px solid #B0E0E6; /* 하늘색 테두리 */
+    border-radius: 15px;
+    width: 200px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+#start-game-button,
+#restart-button,
+#settings-button {
+    padding: 12px 25px;
+    font-size: 1.2em;
+    background-color: #B0E0E6; /* 파우더 블루 */
+    color: #333; /* 텍스트 색상 */
+    border: none;
+    border-radius: 25px; /* 더 둥글게 */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+    font-family: 'Gamja Flower', cursive;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+#start-game-button:hover,
+#restart-button:hover,
+#settings-button:hover {
+    background-color: #87CEEB; /* 스카이 블루 */
+    transform: translateY(-3px); /* 살짝 떠오르는 효과 */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+#game-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px; /* 간격 늘림 */
+}
+
+#left-panel, #right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* 간격 늘림 */
+}
+
+#game-container {
+    width: 400px;
+    height: 600px;
+    background-color: rgba(255, 255, 255, 0.9); /* 부드러운 흰색 */
+    border: none; /* 테두리 제거 */
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px; /* 둥글게 */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+}
+
+#game-over-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8); /* 더 부드러운 반투명 흰색 */
+    color: #333; /* 텍스트 색상 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 20px; /* 둥글게 */
+}
+
+#game-over-screen h1 {
+    font-size: 3em;
+    color: #FF6347; /* 빨간색 강조 */
+}
+
+#fruit-order-canvas {
+    background-color: rgba(255, 255, 255, 0.7); /* 부드러운 흰색 */
+    border-radius: 15px; /* 둥글게 */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+#next-fruit-container,
+#fruit-order-container,
+#score-container,
+#leaderboard-container {
+    width: 120px;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.9); /* 부드러운 흰색 */
+    border: none; /* 테두리 제거 */
+    text-align: center;
+    border-radius: 15px; /* 둥글게 */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+}
+
+#current-score {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #4CAF50; /* 초록색 강조 */
+    margin: 0;
+}
+
+#leaderboard {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    color: #6A5ACD;
+}
+
+#leaderboard li {
+    padding: 8px 5px;
+    border-bottom: 1px dashed #B0E0E6;
+    color: #4682B4;
+}
+
+/* 설정 모달 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(135, 206, 235, 0.6); /* 하늘색 반투명 배경 */
+}
+
+.modal-content {
+    background-color: rgba(255, 255, 255, 0.95); /* 부드러운 흰색 */
+    margin: 10% auto; /* 중앙 정렬 */
+    padding: 30px;
+    border: none; /* 테두리 제거 */
+    width: 90%;
+    max-width: 550px;
+    border-radius: 25px; /* 더 둥글게 */
+    position: relative;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); /* 부드러운 그림자 */
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 32px; /* 크게 */
+    font-weight: bold;
+    line-height: 1; /* 줄 높이 조정 */
+    margin-top: -10px; /* 위로 살짝 이동 */
+    margin-right: -10px; /* 오른쪽으로 살짝 이동 */
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #FF6347; /* 호버 시 색상 변경 */
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.setting-item {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1em;
+    color: #6A5ACD;
+}
+
+.setting-item label {
+    margin-right: 15px;
+}
+
+.setting-item input[type="range"] {
+    width: 60%;
+    -webkit-appearance: none; /* 기본 스타일 제거 */
+    height: 8px;
+    border-radius: 5px;
+    background: #ADD8E6; /* 하늘색 트랙 */
+    outline: none;
+    opacity: 0.7;
+    transition: opacity .2s;
+}
+
+.setting-item input[type="range"]:hover {
+    opacity: 1;
+}
+
+.setting-item input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #B0E0E6; /* 파우더 블루 */
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.setting-item input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #B0E0E6;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.setting-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #B0E0E6; /* 파우더 블루 체크박스 */
+}
+
+#final-score {
+    font-size: 2em;
+    color: #4682B4; /* 스틸 블루 */
+}
+
