@@ -23,12 +23,24 @@ const gameWrapper = document.getElementById('game-wrapper');
 const playerNameInput = document.getElementById('player-name');
 const startGameButton = document.getElementById('start-game-button');
 const gameBGM = document.getElementById('game-bgm');
+const miraiSound = document.getElementById('mirai-sound');
+const ruviSound = document.getElementById('ruvi-sound');
+const nemuSound = document.getElementById('nemu-sound');
+const miraiSound2 = document.getElementById('mirai-sound-2');
+const ruviSound2 = document.getElementById('ruvi-sound-2');
+const nemuSound2 = document.getElementById('nemu-sound-2');
+const miraiSound3 = document.getElementById('mirai-sound-3');
+const ruviSound3 = document.getElementById('ruvi-sound-3');
+const nemuSound3 = document.getElementById('nemu-sound-3');
 const settingsButton = document.getElementById('settings-button');
 const settingsModal = document.getElementById('settings-modal');
 const closeButton = document.querySelector('.close-button');
 const bgmVolumeControl = document.getElementById('bgm-volume');
 const bgmMuteCheckbox = document.getElementById('bgm-mute');
 const themeRadios = document.querySelectorAll('input[name="background-theme"]');
+const difficultyRadios = document.querySelectorAll('input[name="game-difficulty"]');
+const showCreditsButton = document.getElementById('show-credits-button');
+const creditsContent = document.getElementById('credits-content');
 
 const THEMES = {
     spring: './image/hanavi_spring.png',
@@ -40,6 +52,21 @@ const THEMES = {
 let currentScore = 0;
 let leaderboard = [];
 let currentPlayerName = 'Guest';
+let currentDifficulty = localStorage.getItem('hanaviDifficulty') || 'normal'; // 기본값 보통
+
+// 난이도에 따른 과일 생성 범위 반환 함수
+function getDifficultyFruitRange() {
+    switch (currentDifficulty) {
+        case 'easy':
+            return 6; // 0부터 5까지
+        case 'normal':
+            return 5; // 0부터 4까지
+        case 'hard':
+            return 4; // 0부터 3까지
+        default:
+            return 6; // 기본값
+    }
+}
 
 // 테마 적용 함수
 function applyTheme(themeName) {
@@ -60,6 +87,17 @@ themeRadios.forEach(radio => {
         applyTheme(event.target.value);
     });
     if (radio.value === savedTheme) {
+        radio.checked = true;
+    }
+});
+
+// 난이도 라디오 버튼 이벤트 리스너
+difficultyRadios.forEach(radio => {
+    radio.addEventListener('change', (event) => {
+        currentDifficulty = event.target.value;
+        localStorage.setItem('hanaviDifficulty', currentDifficulty);
+    });
+    if (radio.value === currentDifficulty) {
         radio.checked = true;
     }
 });
@@ -113,33 +151,37 @@ const render = Render.create({
     element: gameContainer,
     engine: engine,
     options: {
-        width: 400,
-        height: 600,
+        width: 550,
+        height: 700,
         wireframes: false,
         background: '#fff'
     }
 });
 
 // 경계 생성
-const ground = Bodies.rectangle(200, 600, 400, 20, { isStatic: true, render: { visible: false } });
-const leftWall = Bodies.rectangle(0, 300, 20, 600, { isStatic: true, render: { visible: false } });
-const rightWall = Bodies.rectangle(400, 300, 20, 600, { isStatic: true, render: { visible: false } });
-const topLine = Bodies.rectangle(200, 100, 400, 2, { isStatic: true, isSensor: true, render: { visible: true, strokeStyle: 'red' }, label: 'topLine' });
+const ground = Bodies.rectangle(275, 690, 550, 20, { isStatic: true, render: { visible: false } });
+const leftWall = Bodies.rectangle(0, 350, 20, 700, { isStatic: true, render: { visible: false } });
+const rightWall = Bodies.rectangle(550, 350, 20, 700, { isStatic: true, render: { visible: false } });
+const topLine = Bodies.rectangle(275, 100, 550, 2, { isStatic: true, isSensor: true, render: { visible: true, strokeStyle: 'red' }, label: 'topLine' });
 
 World.add(world, [ground, leftWall, rightWall, topLine]);
 
 // 과일 종류 정의 (이미지 크기에 맞춰 반지름 조정 필요)
 const FRUITS = [
-    { level: 0, radius: 35, texture: './image/1.png' }, // 1.png
-    { level: 1, radius: 45, texture: './image/2.png' }, // 2.png
-    { level: 2, radius: 55, texture: './image/3.png' }, // 3.png
-    { level: 3, radius: 65, texture: './image/4.png' }, // 4.png
-    { level: 4, radius: 75, texture: './image/5.png' }, // 5.png
-    { level: 5, radius: 85, texture: './image/6.png' }, // 6.png
-    { level: 6, radius: 95, texture: './image/7.png' }, // 7.png
+    { level: 0, radius: 31, texture: './image/0.png' }, // 0.png
+    { level: 1, radius: 41, texture: './image/1.png' }, // 1.png
+    { level: 2, radius: 51, texture: './image/2.png' }, // 2.png
+    { level: 3, radius: 61, texture: './image/3.png' }, // 3.png
+    { level: 4, radius: 71, texture: './image/4.png' }, // 4.png
+    { level: 5, radius: 81, texture: './image/5.png' }, // 5.png
+    { level: 6, radius: 91, texture: './image/6.png' }, // 6.png
+    { level: 7, radius: 101, texture: './image/7.png' }, // 7.png
+    { level: 8, radius: 111, texture: './image/8.png' }, // 8.png
+    { level: 9, radius: 121, texture: './image/9.png' }, // 9.png
 ];
 
 let nextFruit;
+let nextNextFruit; // 다음에 나올 과일
 let disableAction = false;
 let previewFruit;
 let gameOverTimeout = null;
@@ -169,7 +211,6 @@ function drawFruitOrder() {
     fruitOrderCtx.textBaseline = 'middle';
 
     FRUITS.forEach((fruit, index) => {
-        console.log(`Drawing fruit order: Level ${fruit.level}, Texture: ${fruit.texture}`);
         const angle = (index / FRUITS.length) * (2 * Math.PI) - (Math.PI / 2); // -PI/2로 시작하여 상단에서 시작
         const fruitX = centerX + circleRadius * Math.cos(angle);
         const fruitY = centerY + circleRadius * Math.sin(angle);
@@ -178,10 +219,8 @@ function drawFruitOrder() {
         img.src = fruit.texture;
         img.onload = () => {
             fruitOrderCtx.drawImage(img, fruitX - fruitDisplayRadius, fruitY - fruitDisplayRadius, fruitDisplayRadius * 2, fruitDisplayRadius * 2);
-            console.log(`Successfully loaded and drew: ${fruit.texture}`);
         };
         img.onerror = () => {
-            console.error(`Failed to load image for fruit order: ${fruit.texture}`);
         };
     });
 }
@@ -189,9 +228,9 @@ function drawFruitOrder() {
 // 다음 과일 캔버스 업데이트
 function updateNextFruitCanvas() {
     nextFruitCtx.clearRect(0, 0, 100, 100);
-    if (nextFruit) {
+    if (nextNextFruit) { // nextNextFruit를 표시
         const img = new Image();
-        img.src = nextFruit.texture;
+        img.src = nextNextFruit.texture;
         img.onload = () => {
             const fixedDrawSize = 80;
             const offsetX = (100 - fixedDrawSize) / 2;
@@ -199,14 +238,35 @@ function updateNextFruitCanvas() {
             nextFruitCtx.drawImage(img, offsetX, offsetY, fixedDrawSize, fixedDrawSize);
         };
         img.onerror = () => {
-            console.error(`Failed to load next fruit image: ${nextFruit.texture}`);
         };
     }
 }
 
+// 과일 초기화 함수
+function initializeFruits() {
+    // 초기 두 개의 과일 설정
+    nextFruit = FRUITS[Math.floor(Math.random() * Math.min(getDifficultyFruitRange(), FRUITS.length))];
+    nextNextFruit = FRUITS[Math.floor(Math.random() * Math.min(getDifficultyFruitRange(), FRUITS.length))];
+    
+    // previewFruit 초기화
+    if (previewFruit) {
+        World.remove(world, previewFruit);
+    }
+    previewFruit = Bodies.circle(200, 50, nextFruit.radius, {
+        isStatic: true,
+        isSensor: true,
+        render: { sprite: { texture: nextFruit.texture, opacity: 0.5 } }
+    });
+    World.add(world, previewFruit);
+
+    updateNextFruitCanvas(); // 다음 과일 표시 업데이트
+}
+
 // 다음 과일 준비
 function prepareNextFruit() {
-    nextFruit = FRUITS[Math.floor(Math.random() * 4)]; // 0~3 레벨 과일 중 랜덤 선택
+    nextFruit = nextNextFruit;
+    nextNextFruit = FRUITS[Math.floor(Math.random() * Math.min(getDifficultyFruitRange(), FRUITS.length))];
+
     updateNextFruitCanvas();
     if (previewFruit) {
         World.remove(world, previewFruit);
@@ -227,8 +287,8 @@ function addFruit(x) {
     const fruit = Bodies.circle(x, 50, fruitToAdd.radius, {
         label: 'fruit_' + fruitToAdd.level,
         render: { sprite: { texture: fruitToAdd.texture } },
-        restitution: 0.4,
-        friction: 0.01
+        restitution: 0.2,
+        friction: 0.5
     });
     World.add(world, fruit);
     prepareNextFruit();
@@ -251,13 +311,14 @@ function restartGame() {
     }
     currentScore = 0;
     currentScoreElement.textContent = currentScore;
-    prepareNextFruit();
+    
+    initializeFruits();
+
     Render.run(render);
     Matter.Runner.run(runner, engine);
 
     if (gameBGM && gameBGM.paused) {
         gameBGM.play().catch(error => {
-            console.log('BGM autoplay prevented on restart:', error);
         });
     }
     displayLeaderboard();
@@ -268,14 +329,14 @@ gameContainer.addEventListener('mousemove', (event) => {
     if (disableAction || !previewFruit) return;
     const rect = gameContainer.getBoundingClientRect();
     const x = event.clientX - rect.left;
-    Body.setPosition(previewFruit, { x: Math.max(nextFruit.radius, Math.min(x, 400 - nextFruit.radius)), y: 50 });
+    Body.setPosition(previewFruit, { x: Math.max(nextFruit.radius, Math.min(x, 550 - nextFruit.radius)), y: 50 });
 });
 
 gameContainer.addEventListener('click', (event) => {
     if (disableAction) return;
     const rect = gameContainer.getBoundingClientRect();
     const x = event.clientX - rect.left;
-    addFruit(Math.max(nextFruit.radius, Math.min(x, 400 - nextFruit.radius)));
+    addFruit(Math.max(nextFruit.radius, Math.min(x, 550 - nextFruit.radius)));
 });
 
 restartButton.addEventListener('click', restartGame);
@@ -287,6 +348,16 @@ Events.on(engine, 'collisionStart', (event) => {
         if (bodyA.label.startsWith('fruit_') && bodyA.label === bodyB.label) {
             const level = parseInt(bodyA.label.split('_')[1]);
             if (level < FRUITS.length - 1) {
+                // 과일 레벨에 따라 다른 효과음 재생
+                let soundToPlay;
+                const sounds = [miraiSound, ruviSound, nemuSound, miraiSound2, ruviSound2, nemuSound2, miraiSound3, ruviSound3, nemuSound3];
+                soundToPlay = sounds[level % sounds.length];
+
+                if (soundToPlay) {
+                    soundToPlay.currentTime = 0; // 재생 위치를 처음으로 되돌림
+                    soundToPlay.play();
+                }
+
                 World.remove(world, [bodyA, bodyB]);
                 const newLevel = level + 1;
                 const newFruitInfo = FRUITS[newLevel];
@@ -296,7 +367,7 @@ Events.on(engine, 'collisionStart', (event) => {
                     label: 'fruit_' + newFruitInfo.level,
                     render: { sprite: { texture: newFruitInfo.texture } },
                     restitution: 0.6,
-                    friction: 0.01
+                    friction: 0.5
                 });
                 const combinedVelocity = { x: (bodyA.velocity.x + bodyB.velocity.x) / 2, y: (bodyA.velocity.y + bodyB.velocity.y) / 2 };
                 Body.setVelocity(newFruit, combinedVelocity);
@@ -318,7 +389,6 @@ Events.on(engine, 'beforeUpdate', () => {
     const deltaTime = now - (lastFrameTime || now);
     lastFrameTime = now;
     const fps = 1000 / deltaTime;
-    // console.log(`FPS: ${fps.toFixed(2)}`);
 
     const bodies = Composite.allBodies(world);
     let isOverLine = false;
@@ -360,12 +430,12 @@ function startGame() {
         gameBGM.volume = bgmVolumeControl.value; // 설정된 볼륨 적용
         gameBGM.muted = bgmMuteCheckbox.checked; // 설정된 음소거 적용
         gameBGM.play().catch(error => {
-            console.log('BGM autoplay prevented:', error);
         });
     }
 
     drawFruitOrder();
-    prepareNextFruit();
+    initializeFruits();
+
     Render.run(render);
     Matter.Runner.run(runner, engine);
 }
@@ -405,6 +475,16 @@ bgmMuteCheckbox.addEventListener('change', () => {
     }
 });
 
+// 크레딧 보기 버튼 이벤트 리스너
+showCreditsButton.addEventListener('click', () => {
+    if (creditsContent.style.display === 'none') {
+        creditsContent.style.display = 'block';
+    } else {
+        creditsContent.style.display = 'none';
+    }
+});
+
 // 초기 실행
 loadLeaderboard();
 startGameButton.addEventListener('click', startGame);
+confirmDifficultyButton.addEventListener('click', startActualGame);

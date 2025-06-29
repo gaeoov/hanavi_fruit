@@ -72,11 +72,63 @@
                 <input type="radio" id="theme-winter" name="background-theme" value="winter">
                 <label for="theme-winter">겨울</label>
             </div>
+            <div class="setting-item">
+                <label>난이도:</label>
+                <input type="radio" id="difficulty-easy" name="game-difficulty" value="easy">
+                <label for="difficulty-easy">쉬움</label>
+                <input type="radio" id="difficulty-normal" name="game-difficulty" value="normal" checked>
+                <label for="difficulty-normal">보통</label>
+                <input type="radio" id="difficulty-hard" name="game-difficulty" value="hard">
+                <label for="difficulty-hard">어려움</label>
+            </div>
+            <div style="text-align: center; margin-top: -10px; margin-bottom: 20px; line-height: 1.5; font-size: 0.9em; color: #555;">
+                <p style="margin: 0;">쉬움 : 레벨 0부터 5까지의 과일이 출현</p>
+                <p style="margin: 0;">보통 : 레벨 0부터 4까지의 과일이 출현 (추천)</p>
+                <p style="margin: 0;">어려움 : 레벨 0부터 3까지의 과일이 출현</p>
+            </div>
+            <div class="setting-item">
+                <button id="show-credits-button">크레딧</button>
+            </div>
+            <div id="credits-content" style="display: none; text-align: left; margin-top: 10px; padding: 10px; border: 1px solid #eee; border-radius: 5px; background-color: #f9f9f9;">
+                <p><strong>개발 및 기획:</strong> 능네</p>
+                <p><strong>그래픽:</strong></p>
+                <ul>
+                    <li>배경 이미지: 공식 카페 CANU님</li>
+                    <li>과일 이미지: 하나비 공식</li>
+                </ul>
+                <p><strong>사운드:</strong></p>
+                <ul>
+                    <li>배경 음악: pixabay.com</li>
+                    <li>효과음: 하나비 (네무 of HANAVI, 루비 of HANAVI, 미라이 of HANAVI)</li>
+                </ul>
+                <p><strong>사용한 기술:</strong></p>
+                <ul>
+                    <li>웹 표준: HTML5, CSS3, JavaScript</li>
+                    <li>게임 엔진: Matter.js</li>
+                    <li>그래픽 API: HTML Canvas API</li>
+                    <li>폰트: Gamja Flower (Google Fonts)</li>
+                </ul>
+                <p><strong>Special Thanks to:</strong></p>
+                <ul>
+                    <li>모든 네개, 메루, 호시몽</li>
+                    <li>그리고 늘 열심히 방송하며 웃음 주는 네무, 루비, 미라이</li>
+                    <li>앞으로도 행복하게 오래보자~</li>
+                </ul>
+            </div>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.17.1/matter.min.js"></script>
     <audio id="game-bgm" src="./sound/bgm.mp3" loop preload="auto"></audio>
+    <audio id="mirai-sound" src="./sound/mirai_1.mp3" preload="auto"></audio>
+    <audio id="ruvi-sound" src="./sound/ruvi_1.mp3" preload="auto"></audio>
+    <audio id="nemu-sound" src="./sound/nemu_1.mp3" preload="auto"></audio>
+    <audio id="mirai-sound-2" src="./sound/mirai_2.mp3" preload="auto"></audio>
+    <audio id="ruvi-sound-2" src="./sound/ruvi_2.mp3" preload="auto"></audio>
+    <audio id="nemu-sound-2" src="./sound/nemu_2.mp3" preload="auto"></audio>
+    <audio id="mirai-sound-3" src="./sound/mirai_3.mp3" preload="auto"></audio>
+    <audio id="ruvi-sound-3" src="./sound/ruvi_3.mp3" preload="auto"></audio>
+    <audio id="nemu-sound-3" src="./sound/nemu_3.mp3" preload="auto"></audio>
     <script src="script.js"></script>
 </body>
 </html>

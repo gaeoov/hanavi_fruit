@@ -7,6 +7,7 @@ body {
     align-items: center;
     height: 100vh;
     font-family: 'Gamja Flower', cursive;
+    overflow: auto;
 }
 
 .setting-item input[type="radio"] {
@@ -22,11 +23,24 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    height: auto;
     width: 100%;
 }
 
 #intro-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.9); /* 부드러운 흰색 */
+    border: none; /* 테두리 제거 */
+    padding: 40px;
+    border-radius: 20px; /* 더 둥글게 */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+    z-index: 10;
+}
+
+#difficulty-selection-screen {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -67,7 +81,8 @@ body {
 
 #start-game-button,
 #restart-button,
-#settings-button {
+#settings-button,
+#show-credits-button {
     padding: 12px 25px;
     font-size: 1.2em;
     background-color: #B0E0E6; /* 파우더 블루 */
@@ -83,7 +98,8 @@ body {
 
 #start-game-button:hover,
 #restart-button:hover,
-#settings-button:hover {
+#settings-button:hover,
+#show-credits-button:hover {
     background-color: #87CEEB; /* 스카이 블루 */
     transform: translateY(-3px); /* 살짝 떠오르는 효과 */
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
@@ -92,19 +108,19 @@ body {
 #game-wrapper {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    gap: 20px; /* 간격 늘림 */
+    align-items: center;
+    gap: 30px;
 }
 
 #left-panel, #right-panel {
     display: flex;
     flex-direction: column;
-    gap: 20px; /* 간격 늘림 */
+    gap: 20px;
 }
 
 #game-container {
-    width: 400px;
-    height: 600px;
+    width: 550px;
+    height: 700px;
     background-color: rgba(255, 255, 255, 0.9); /* 부드러운 흰색 */
     border: none; /* 테두리 제거 */
     position: relative;
