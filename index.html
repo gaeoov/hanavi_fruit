@@ -54,14 +54,6 @@
             <span class="close-button">&times;</span>
             <h2>설정</h2>
             <div class="setting-item">
-                <label for="bgm-volume">BGM 볼륨:</label>
-                <input type="range" id="bgm-volume" min="0" max="1" step="0.01" value="0.5">
-            </div>
-            <div class="setting-item">
-                <input type="checkbox" id="bgm-mute">
-                <label for="bgm-mute">BGM 음소거</label>
-            </div>
-            <div class="setting-item">
                 <label>배경 테마:</label>
                 <input type="radio" id="theme-spring" name="background-theme" value="spring">
                 <label for="theme-spring">봄</label>
@@ -73,19 +65,89 @@
                 <label for="theme-winter">겨울</label>
             </div>
             <div class="setting-item">
-                <label>난이도:</label>
-                <input type="radio" id="difficulty-easy" name="game-difficulty" value="easy">
-                <label for="difficulty-easy">쉬움</label>
-                <input type="radio" id="difficulty-normal" name="game-difficulty" value="normal" checked>
-                <label for="difficulty-normal">보통</label>
-                <input type="radio" id="difficulty-hard" name="game-difficulty" value="hard">
-                <label for="difficulty-hard">어려움</label>
+                <label for="bgm-volume">BGM 볼륨:</label>
+                <input type="range" id="bgm-volume" min="0" max="1" step="0.01" value="0.5">
             </div>
-            <div style="text-align: center; margin-top: -10px; margin-bottom: 20px; line-height: 1.5; font-size: 0.9em; color: #555;">
-                <p style="margin: 0;">쉬움 : 레벨 0부터 5까지의 과일이 출현</p>
-                <p style="margin: 0;">보통 : 레벨 0부터 4까지의 과일이 출현 (추천)</p>
-                <p style="margin: 0;">어려움 : 레벨 0부터 3까지의 과일이 출현</p>
+            <div class="setting-item">
+                <input type="checkbox" id="bgm-mute">
+                <label for="bgm-mute">BGM 음소거</label>
             </div>
+
+            <div class="setting-item">
+                <label for="sfx-volume">효과음 볼륨:</label>
+                <input type="range" id="sfx-volume" min="0" max="1" step="0.01" value="1">
+            </div>
+            <div class="setting-item">
+                <input type="checkbox" id="sfx-mute">
+                <label for="sfx-mute">효과음 음소거</label>
+            </div>
+
+            <div class="tab">
+                <button class="tablinks active" data-tab="mirai">미라이</button>
+                <button class="tablinks" data-tab="ruvi">루비</button>
+                <button class="tablinks" data-tab="nemu">네무</button>
+            </div>
+
+            <div id="mirai" class="tabcontent" style="display: block;">
+                <div class="sfx-group">
+                    <div class="setting-item sfx-control">
+                        <label for="mirai-1-volume">미라이 1:</label>
+                        <input type="range" id="mirai-1-volume" class="sfx-volume-individual" data-sound-id="mirai-sound" min="0" max="1" step="0.01" value="1">
+                        <button class="preview-button" data-sound-id="mirai-sound">미리듣기</button>
+                    </div>
+                    <div class="setting-item sfx-control">
+                        <label for="mirai-2-volume">미라이 2:</label>
+                        <input type="range" id="mirai-2-volume" class="sfx-volume-individual" data-sound-id="mirai-sound-2" min="0" max="1" step="0.01" value="0.5">
+                        <button class="preview-button" data-sound-id="mirai-sound-2">미리듣기</button>
+                    </div>
+                    <div class="setting-item sfx-control">
+                        <label for="mirai-3-volume">미라이 3:</label>
+                        <input type="range" id="mirai-3-volume" class="sfx-volume-individual" data-sound-id="mirai-sound-3" min="0" max="1" step="0.01" value="0.75">
+                        <button class="preview-button" data-sound-id="mirai-sound-3">미리듣기</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ruvi" class="tabcontent" style="display: none;">
+                <div class="sfx-group">
+                    <div class="setting-item sfx-control">
+                        <label for="ruvi-1-volume">루비 1:</label>
+                        <input type="range" id="ruvi-1-volume" class="sfx-volume-individual" data-sound-id="ruvi-sound" min="0" max="1" step="0.01" value="1">
+                        <button class="preview-button" data-sound-id="ruvi-sound">미리듣기</button>
+                    </div>
+                    <div class="setting-item sfx-control">
+                        <label for="ruvi-2-volume">루비 2:</label>
+                        <input type="range" id="ruvi-2-volume" class="sfx-volume-individual" data-sound-id="ruvi-sound-2" min="0" max="1" step="0.01" value="0.5">
+                        <button class="preview-button" data-sound-id="ruvi-sound-2">미리듣기</button>
+                    </div>
+                    <div class="setting-item sfx-control">
+                        <label for="ruvi-3-volume">루비 3:</label>
+                        <input type="range" id="ruvi-3-volume" class="sfx-volume-individual" data-sound-id="ruvi-sound-3" min="0" max="1" step="0.01" value="0.75">
+                        <button class="preview-button" data-sound-id="ruvi-sound-3">미리듣기</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="nemu" class="tabcontent" style="display: none;">
+                <div class="sfx-group">
+                    <div class="setting-item sfx-control">
+                        <label for="nemu-1-volume">네무 1:</label>
+                        <input type="range" id="nemu-1-volume" class="sfx-volume-individual" data-sound-id="nemu-sound" min="0" max="1" step="0.01" value="1">
+                        <button class="preview-button" data-sound-id="nemu-sound">미리듣기</button>
+                    </div>
+                    <div class="setting-item sfx-control">
+                        <label for="nemu-2-volume">네무 2:</label>
+                        <input type="range" id="nemu-2-volume" class="sfx-volume-individual" data-sound-id="nemu-sound-2" min="0" max="1" step="0.01" value="0.5">
+                        <button class="preview-button" data-sound-id="nemu-sound-2">미리듣기</button>
+                    </div>
+                    <div class="setting-item sfx-control">
+                        <label for="nemu-3-volume">네무 3:</label>
+                        <input type="range" id="nemu-3-volume" class="sfx-volume-individual" data-sound-id="nemu-sound-3" min="0" max="1" step="0.01" value="1">
+                        <button class="preview-button" data-sound-id="nemu-sound-3">미리듣기</button>
+                    </div>
+                </div>
+            </div>
+
             <div class="setting-item">
                 <button id="show-credits-button">크레딧</button>
             </div>
@@ -94,7 +156,7 @@
                 <p><strong>그래픽:</strong></p>
                 <ul>
                     <li>배경 이미지: 공식 카페 CANU님</li>
-                    <li>과일 이미지: 하나비 공식(허락 받는중)</li>
+                    <li>과일 이미지: 하나비 (네무 of HANAVI, 루비 of HANAVI, 미라이 of HANAVI)</li>
                 </ul>
                 <p><strong>사운드:</strong></p>
                 <ul>
@@ -112,7 +174,6 @@
                 <ul>
                     <li>모든 네개, 메루, 호시몽</li>
                     <li>그리고 늘 열심히 방송하며 웃음 주는 네무, 루비, 미라이</li>
-                    <li>앞으로도 행복하게 오래보자~</li>
                 </ul>
             </div>
         </div>
@@ -123,6 +184,7 @@
     <audio id="mirai-sound" src="./sound/mirai_1.mp3" preload="auto"></audio>
     <audio id="ruvi-sound" src="./sound/ruvi_1.mp3" preload="auto"></audio>
     <audio id="nemu-sound" src="./sound/nemu_1.mp3" preload="auto"></audio>
+    
     <audio id="mirai-sound-2" src="./sound/mirai_2.mp3" preload="auto"></audio>
     <audio id="ruvi-sound-2" src="./sound/ruvi_2.mp3" preload="auto"></audio>
     <audio id="nemu-sound-2" src="./sound/nemu_2.mp3" preload="auto"></audio>
