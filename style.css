@@ -8,6 +8,7 @@ body {
     height: 100vh;
     font-family: 'Gamja Flower', cursive;
     overflow: auto;
+    font-weight: bold;
 }
 
 .setting-item input[type="radio"] {
@@ -28,19 +29,6 @@ body {
 }
 
 #intro-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(255, 255, 255, 0.9); /* 부드러운 흰색 */
-    border: none; /* 테두리 제거 */
-    padding: 40px;
-    border-radius: 20px; /* 더 둥글게 */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
-    z-index: 10;
-}
-
-#difficulty-selection-screen {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -94,6 +82,21 @@ body {
     margin-bottom: 20px;
     font-family: 'Gamja Flower', cursive;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    font-weight: bold; /* 볼드 추가 */
+}
+
+.preview-button {
+    padding: 8px 15px; /* 크기 줄임 */
+    font-size: 0.9em; /* 폰트 크기 줄임 */
+    background-color: #B0E0E6; /* 파우더 블루 */
+    color: #333; /* 텍스트 색상 */
+    border: none;
+    border-radius: 20px; /* 둥글게 */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Gamja Flower', cursive;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    font-weight: bold; /* 볼드 추가 */
 }
 
 #start-game-button:hover,
@@ -103,6 +106,12 @@ body {
     background-color: #87CEEB; /* 스카이 블루 */
     transform: translateY(-3px); /* 살짝 떠오르는 효과 */
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.preview-button:hover {
+    background-color: #87CEEB; /* 스카이 블루 */
+    transform: translateY(-2px); /* 살짝 떠오르는 효과 */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 }
 
 #game-wrapper {
@@ -121,12 +130,13 @@ body {
 #game-container {
     width: 550px;
     height: 700px;
-    background-color: rgba(255, 255, 255, 0.9); /* 부드러운 흰색 */
-    border: none; /* 테두리 제거 */
+    background: linear-gradient(45deg, rgba(240, 230, 140, 0.8) 25%, rgba(245, 222, 179, 0.8) 25%, rgba(245, 222, 179, 0.8) 50%, rgba(240, 230, 140, 0.8) 50%, rgba(240, 230, 140, 0.8) 75%, rgba(245, 222, 179, 0.8) 75%, rgba(245, 222, 179, 0.8) 100%);
+    background-size: 20px 20px; /* 패턴 크기 조절 */
+    border: 2px solid #B0E0E6; /* 이전 테두리 값 유지 */
     position: relative;
     overflow: hidden;
     border-radius: 20px; /* 둥글게 */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25), inset 0 0 15px rgba(0, 0, 0, 0.1); /* 그림자 강화 및 내부 그림자 유지 */
 }
 
 #game-over-screen {
@@ -246,6 +256,11 @@ body {
     margin-right: 15px;
 }
 
+.sfx-control label {
+    min-width: 80px; /* '미라이 1:' 등 가장 긴 텍스트를 기준으로 충분한 너비 설정 */
+    text-align: right; /* 레이블 텍스트를 오른쪽 정렬하여 입력 필드와 간격 유지 */
+}
+
 .setting-item input[type="range"] {
     width: 60%;
     -webkit-appearance: none; /* 기본 스타일 제거 */
@@ -285,6 +300,51 @@ body {
     width: 20px;
     height: 20px;
     accent-color: #B0E0E6; /* 파우더 블루 체크박스 */
+}
+
+.sfx-group h4 {
+    margin-bottom: 15px;
+    color: #6A5ACD;
+}
+
+.sfx-control {
+    justify-content: space-between;
+}
+
+.tab {
+    overflow: hidden;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 0; /* 좌우 패딩 제거 */
+    transition: 0.3s;
+    font-size: 17px;
+    font-family: 'Gamja Flower', cursive;
+    color: #6A5ACD;
+    width: 33.33%; /* 각 탭 버튼이 전체 너비의 1/3을 차지하도록 설정 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    font-weight: bold; /* 볼드 추가 */
+}
+
+.tab button:hover {
+    background-color: #ddd;
+}
+
+.tab button.active {
+    background-color: #ccc;
+}
+
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border-top: none;
 }
 
 #final-score {
