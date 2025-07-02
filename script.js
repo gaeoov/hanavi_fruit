@@ -26,6 +26,7 @@ const gameBGM = document.getElementById('game-bgm');
 const miraiSound = document.getElementById('mirai-sound');
 const ruviSound = document.getElementById('ruvi-sound');
 const nemuSound = document.getElementById('nemu-sound');
+
 const miraiSound2 = document.getElementById('mirai-sound-2');
 const ruviSound2 = document.getElementById('ruvi-sound-2');
 const nemuSound2 = document.getElementById('nemu-sound-2');
@@ -37,8 +38,11 @@ const settingsModal = document.getElementById('settings-modal');
 const closeButton = document.querySelector('.close-button');
 const bgmVolumeControl = document.getElementById('bgm-volume');
 const bgmMuteCheckbox = document.getElementById('bgm-mute');
+const sfxVolumeControl = document.getElementById('sfx-volume');
+const sfxMuteCheckbox = document.getElementById('sfx-mute');
+const individualSfxControls = document.querySelectorAll('.sfx-volume-individual');
+const previewButtons = document.querySelectorAll('.preview-button');
 const themeRadios = document.querySelectorAll('input[name="background-theme"]');
-const difficultyRadios = document.querySelectorAll('input[name="game-difficulty"]');
 const showCreditsButton = document.getElementById('show-credits-button');
 const creditsContent = document.getElementById('credits-content');
 
@@ -52,21 +56,6 @@ const THEMES = {
 let currentScore = 0;
 let leaderboard = [];
 let currentPlayerName = 'Guest';
-let currentDifficulty = localStorage.getItem('hanaviDifficulty') || 'normal'; // 기본값 보통
-
-// 난이도에 따른 과일 생성 범위 반환 함수
-function getDifficultyFruitRange() {
-    switch (currentDifficulty) {
-        case 'easy':
-            return 6; // 0부터 5까지
-        case 'normal':
-            return 5; // 0부터 4까지
-        case 'hard':
-            return 4; // 0부터 3까지
-        default:
-            return 6; // 기본값
-    }
-}
 
 // 테마 적용 함수
 function applyTheme(themeName) {
@@ -87,17 +76,6 @@ themeRadios.forEach(radio => {
         applyTheme(event.target.value);
     });
     if (radio.value === savedTheme) {
-        radio.checked = true;
-    }
-});
-
-// 난이도 라디오 버튼 이벤트 리스너
-difficultyRadios.forEach(radio => {
-    radio.addEventListener('change', (event) => {
-        currentDifficulty = event.target.value;
-        localStorage.setItem('hanaviDifficulty', currentDifficulty);
-    });
-    if (radio.value === currentDifficulty) {
         radio.checked = true;
     }
 });
@@ -245,8 +223,8 @@ function updateNextFruitCanvas() {
 // 과일 초기화 함수
 function initializeFruits() {
     // 초기 두 개의 과일 설정
-    nextFruit = FRUITS[Math.floor(Math.random() * Math.min(getDifficultyFruitRange(), FRUITS.length))];
-    nextNextFruit = FRUITS[Math.floor(Math.random() * Math.min(getDifficultyFruitRange(), FRUITS.length))];
+    nextFruit = FRUITS[Math.floor(Math.random() * Math.min(4, FRUITS.length))];
+    nextNextFruit = FRUITS[Math.floor(Math.random() * Math.min(4, FRUITS.length))];
     
     // previewFruit 초기화
     if (previewFruit) {
@@ -265,7 +243,7 @@ function initializeFruits() {
 // 다음 과일 준비
 function prepareNextFruit() {
     nextFruit = nextNextFruit;
-    nextNextFruit = FRUITS[Math.floor(Math.random() * Math.min(getDifficultyFruitRange(), FRUITS.length))];
+    nextNextFruit = FRUITS[Math.floor(Math.random() * Math.min(4, FRUITS.length))];
 
     updateNextFruitCanvas();
     if (previewFruit) {
@@ -366,8 +344,8 @@ Events.on(engine, 'collisionStart', (event) => {
                 const newFruit = Bodies.circle(newX, newY, newFruitInfo.radius, {
                     label: 'fruit_' + newFruitInfo.level,
                     render: { sprite: { texture: newFruitInfo.texture } },
-                    restitution: 0.6,
-                    friction: 0.5
+                    restitution: 0.8,
+                    friction: 0.8
                 });
                 const combinedVelocity = { x: (bodyA.velocity.x + bodyB.velocity.x) / 2, y: (bodyA.velocity.y + bodyB.velocity.y) / 2 };
                 Body.setVelocity(newFruit, combinedVelocity);
@@ -475,6 +453,62 @@ bgmMuteCheckbox.addEventListener('change', () => {
     }
 });
 
+// 효과음 볼륨 조절
+sfxVolumeControl.addEventListener('input', () => {
+    if (sfxMuteCheckbox.checked) {
+        sfxMuteCheckbox.checked = false; // 볼륨 조절 시 음소거 해제
+    }
+    const globalVolume = sfxVolumeControl.value;
+    individualSfxControls.forEach(control => {
+        const soundId = control.dataset.soundId;
+        const soundElement = document.getElementById(soundId);
+        if (soundElement) {
+            soundElement.volume = globalVolume * control.value;
+            soundElement.muted = false; // 볼륨 조절 시 음소거 해제
+        }
+    });
+});
+
+sfxMuteCheckbox.addEventListener('change', () => {
+    const allSoundElements = [miraiSound, ruviSound, nemuSound, miraiSound2, ruviSound2, nemuSound2, miraiSound3, ruviSound3, nemuSound3];
+    allSoundElements.forEach(soundElement => {
+        if (soundElement) {
+            soundElement.muted = sfxMuteCheckbox.checked;
+        }
+    });
+});
+
+individualSfxControls.forEach(control => {
+    control.addEventListener('input', () => {
+        if (sfxMuteCheckbox.checked) {
+            sfxMuteCheckbox.checked = false; // 볼륨 조절 시 음소거 해제
+        }
+        const soundId = control.dataset.soundId;
+        const soundElement = document.getElementById(soundId);
+        if (soundElement) {
+            soundElement.volume = sfxVolumeControl.value * control.value;
+            soundElement.muted = false; // 볼륨 조절 시 음소거 해제
+        }
+    });
+});
+
+// 미리듣기 버튼
+previewButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const soundId = button.dataset.soundId;
+        const soundElement = document.getElementById(soundId);
+        const individualVolumeSlider = document.querySelector(`input[data-sound-id="${soundId}"]`);
+        if (soundElement && individualVolumeSlider) {
+            soundElement.volume = sfxVolumeControl.value * individualVolumeSlider.value;
+            soundElement.currentTime = 0;
+            soundElement.play();
+        }
+    });
+});
+
+const tablinks = document.querySelectorAll('.tablinks');
+const tabcontents = document.querySelectorAll('.tabcontent');
+
 // 크레딧 보기 버튼 이벤트 리스너
 showCreditsButton.addEventListener('click', () => {
     if (creditsContent.style.display === 'none') {
@@ -484,7 +518,25 @@ showCreditsButton.addEventListener('click', () => {
     }
 });
 
+// 탭 기능
+tablinks.forEach(tablink => {
+    tablink.addEventListener('click', () => {
+        const tabName = tablink.dataset.tab;
+
+        tabcontents.forEach(tabcontent => {
+            tabcontent.style.display = 'none';
+        });
+
+        tablinks.forEach(tablink => {
+            tablink.classList.remove('active');
+        });
+
+        document.getElementById(tabName).style.display = 'block';
+        tablink.classList.add('active');
+    });
+});
+
+
 // 초기 실행
 loadLeaderboard();
 startGameButton.addEventListener('click', startGame);
-confirmDifficultyButton.addEventListener('click', startActualGame);
